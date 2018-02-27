@@ -16,7 +16,10 @@ public class MatriculaVista {
 
 	//crear menu
 	
-	final static int LISTAR = 1; 
+	final static int MOSTRAR_MATRICULAS = 1; 
+	final static int ALUMNOS_MATRICULAS = 2;
+	final static int MATRICULAS_ALUMNOS = 3; 
+	final static int ALUMNOS_HORAS = 4; 
 	final static int SALIR = 0; 
 	
 	
@@ -33,17 +36,36 @@ public class MatriculaVista {
 			
 			//solo hay 1 en el menu
 			System.out.println("------------MENU-----------");
-			System.out.println(LISTAR + " listar matriculas");
+			System.out.println(MOSTRAR_MATRICULAS + " listar matriculas");
+			System.out.println(ALUMNOS_MATRICULAS + " listar alumnos con sus matriculas"); 
+			System.out.println(MATRICULAS_ALUMNOS + " listar matriculas con sus alumnos");
+			System.out.println(ALUMNOS_HORAS + " listar alumnos con las horas totales"); 
 			
 			opcion = Integer.parseInt(lector.nextLine()); 
 			
 			switch (opcion){
 			
-			case LISTAR:
-			ArrayList <Matricula> matriculas = 	matriculaModelo.selectAll(); 
-			this.mostrarMatriculas(matriculas); 
-			
+			case MOSTRAR_MATRICULAS:
+				ArrayList <Matricula> matriculas = 	matriculaModelo.selectAll(); 
+				this.mostrarMatriculas(matriculas); 
 				break;
+				
+			case ALUMNOS_MATRICULAS: 
+				AlumnoModelo alumnoModelo = new AlumnoModelo(); 
+				ArrayList<Alumno> alumnos = alumnoModelo.getAlumnosAsignaturas(); 
+				this.mostrarAlumnosAsignaturas(alumnos);
+				break; 
+				
+			case MATRICULAS_ALUMNOS: 
+				AsignaturaModelo asignaturaModelo = new AsignaturaModelo(); 
+				ArrayList<Asignatura> asignaturas = asignaturaModelo.getAsignaturaAlumnos(); 
+				this.mostarAsignaturasAlumnos(asignaturas);
+			
+			case ALUMNOS_HORAS: 
+//				alumnos = alumnoModelo.getAlumnosAsignaturas(); 
+//				this.mostrarAlumnosconHorasMatriculadas(alumno); 
+					break;
+				
 
 			default:
 				break;
@@ -53,15 +75,16 @@ public class MatriculaVista {
 		
 	}
 
-	public void mostrarMatricula(Matricula matricula){
-	
-		//sacar la info de alumno y de asignatura
-		AlumnoModelo alumnoModelo = new AlumnoModelo(); 
-		Alumno alumno = alumnoModelo.getAlumno(matricula.getId_alumno()); 
-		AsignaturaModelo asignaturaModelo = new AsignaturaModelo(); 
-		Asignatura asignatura = asignaturaModelo.getAsignatura(matricula.getId_asignatura()); 
+	public void mostrarMatricula(ArrayList<Matricula> matriculas){
+
+		Iterator<Matricula> i = matriculas.iterator(); 
 		
-		System.out.println(alumno.getNombre() + " " + alumno.getDni() + " : " + asignatura.getNombre() + " " + asignatura.getHoras());
+		while(i.hasNext()){
+			
+			Matricula matricula = i.next(); 
+			
+			System.out.println(matricula.getAlumno().getNombre() + " " + matricula.getAlumno().getDni() + " " +  matricula.getAlumno().getProvincia().getNombre() +  " " + matricula.getAsignatura().getNombre() + " " + matricula.getAsignatura().getHoras()); 
+		}
 		
 		
 	}
@@ -73,9 +96,56 @@ public class MatriculaVista {
 		
 		while(i.hasNext()){
 			Matricula matricula = i.next();
-			mostrarMatricula(matricula); 	
+			mostrarMatricula(matriculas); 	
 		}
 		
+	}
+	
+	public void mostrarAlumnosAsignaturas(ArrayList<Alumno> alumnos){
+		
+		MatriculaModelo matriculaModelo = new MatriculaModelo(); 
+		
+		//recorrer array de alumnos
+		Iterator<Alumno> i = alumnos.iterator(); 
+		
+		while(i.hasNext()){
+			Alumno alumno = i.next(); 
+			System.out.println(alumno.getNombre() + " " + alumno.getDni() + " " + alumno.getProvincia().getNombre() + " : ");
+		
+			ArrayList<Matricula> matriculas = matriculaModelo.getAlumnoconAsignaturas(alumno); 
+		
+			//recorrer array de matriculas
+			Iterator<Matricula> j = matriculas.iterator(); 
+			while(j.hasNext()){
+				Matricula matricula = j.next(); 
+				System.out.println(matricula.getAsignatura().getNombre() + " " + matricula.getAsignatura().getHoras());
+			}
+		
+		}
+		
+	}
+	
+	public void mostarAsignaturasAlumnos(ArrayList<Asignatura> asignaturas){
+		
+		MatriculaModelo matriculaModelo = new MatriculaModelo(); 
+		
+		Iterator<Asignatura> i = asignaturas.iterator(); 
+		
+		while(i.hasNext()){
+			Asignatura asignatura = i.next(); 
+			System.out.println(asignatura.getNombre() + " " + asignatura.getHoras() + " : ");
+			
+			ArrayList<Matricula> matriculas = matriculaModelo.getAsignaturaconAlumnos(asignatura); 
+			
+			//recorrer array de matriculas
+			
+			Iterator<Matricula> j = matriculas.iterator(); 
+			while(j.hasNext()){
+				Matricula matricula = j.next(); 
+				System.out.println(matricula.getAlumno().getNombre() + " " + matricula.getAlumno().getDni() + " " + matricula.getAlumno().getProvincia().getNombre());
+			} 
+			
+		}
 	}
 	
 }

@@ -6,8 +6,8 @@ public class Matricula {
 	
 	
 	//por la relacion
-	protected int id_alumno;
-	protected int id_asignatura; 
+	protected Alumno alumno;
+	protected Asignatura asignatura; 
 	
 	//atributo suyo propio
 	protected Date fecha;
@@ -17,29 +17,29 @@ public class Matricula {
 	 * @return the id_alumno
 	 */
 	
-	public int getId_alumno() {
-		return id_alumno;
+	public Alumno getAlumno() {
+		return alumno;
 	}
 	
 	/**
-	 * @param id_alumno the id_alumno to set
+	 * @param alumno to set
 	 */
-	public void setId_alumno(int id_alumno) {
-		this.id_alumno = id_alumno;
+	public void setAlumno(Alumno alumno) {
+		this.alumno = alumno;
 	}
 	
 	/**
 	 * @return the id_asignatura
 	 */
-	public int getId_asignatura() {
-		return id_asignatura;
+	public Asignatura getAsignatura() {
+		return asignatura;
 	}
 	
 	/**
 	 * @param id_asignatura the id_asignatura to set
 	 */
-	public void setId_asignatura(int id_asignatura) {
-		this.id_asignatura = id_asignatura;
+	public void setAsignatura(Asignatura asignatura) {
+		this.asignatura = asignatura;
 	}
 	
 	/**
@@ -54,7 +54,8 @@ public class Matricula {
 	 */
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
-	} 
+	}
+
 	
 	
 	

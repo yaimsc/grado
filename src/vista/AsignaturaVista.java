@@ -7,7 +7,7 @@ public class AsignaturaVista {
 	public void buscarAsignatura(int id){
 		
 		AsignaturaModelo asignatura = new AsignaturaModelo(); 
-		asignatura.getAsignatura(id); 
+		asignatura.selectAsignatura(id); 
 	}
 
 }

@@ -4,6 +4,12 @@ import java.util.ArrayList;
 
 public class Asignatura {
 	
+	
+	protected int id; 
+	protected String nombre; 
+	protected int horas;
+	protected ArrayList <Asignatura> asignturas; 
+	
 	/**
 	 * @return the matriculas
 	 */
@@ -18,9 +24,7 @@ public class Asignatura {
 		this.matriculas = matriculas;
 	}
 
-	protected int id; 
-	protected String nombre; 
-	protected int horas;
+	
 	
 	//por la relacion que tiejne con matricula
 	private ArrayList<Matricula> matriculas; 

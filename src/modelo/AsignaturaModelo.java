@@ -3,14 +3,17 @@ package modelo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+
+import clases.Alumno;
 import clases.Asignatura;
+import clases.Matricula;
 
 public class AsignaturaModelo extends Conector{
 	
 	
-	public Asignatura getAsignatura (int id){
+	public Asignatura selectAsignatura (int id){
 		
-		Asignatura asignatura = new Asignatura(); 
 			
 			try {
 				
@@ -19,13 +22,13 @@ public class AsignaturaModelo extends Conector{
 				ResultSet rs = pst.executeQuery(); 
 				
 				if(rs.next()){
-				
+					
+					Asignatura asignatura = new Asignatura(); 
 					 asignatura.setId(rs.getInt("id")); 
 					 asignatura.setNombre(rs.getString("nombre"));
 					 asignatura.setHoras(rs.getInt("horas"));
 					 
-					 return asignatura; 
-	
+					 return asignatura;
 				}
 				
 			} catch (SQLException e) {
@@ -33,13 +36,42 @@ public class AsignaturaModelo extends Conector{
 				e.printStackTrace();
 			} 
 			
-			
-			return asignatura;
+			return null; 
 			
 		}
+	
+	public ArrayList<Asignatura> getAsignaturaAlumnos (){
+	
+		ArrayList<Asignatura> asignaturas = new ArrayList<Asignatura>(); 
+		MatriculaModelo matriculaModelo = new MatriculaModelo(); 
+	
+		
+		try {
+		
+			PreparedStatement pst = super.conexion.prepareStatement("select * from asignatura");
+			ResultSet rs = pst.executeQuery();
+		
+			while(rs.next()){
+				Asignatura asignatura = new Asignatura(); 	
+				asignatura.setId(rs.getInt("id"));
+				asignatura.setNombre(rs.getString("nombre"));
+				asignatura.setHoras(rs.getInt("horas")); 
+				ArrayList<Matricula> matriculas = matriculaModelo.getAsignaturaconAlumnos(asignatura); 
+				asignatura.setMatriculas(matriculas);
+				
+				asignaturas.add(asignatura); 
 			
-
+		}
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+		
+		return asignaturas; 
 			
 	}
+
+}
 
 
